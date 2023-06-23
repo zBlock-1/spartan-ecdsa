@@ -32,5 +32,30 @@ describe("ecdsa", () => {
     await circuit.checkConstraints(w);
   });
 
-  // TODO - add more tests
+  it("should verify N random messages from random private keys", async () => {
+    const circuit = await wasm_tester(
+      path.join(__dirname, "./circuits/eff_ecdsa_test.circom"),
+      {
+        prime: "secq256k1"
+      }
+    );
+
+    const N = 1000;
+
+    for (let i = 0; i < N; i++) {
+      const privKey = randomBytes(32);
+      const pubKey = ec.keyFromPrivate(privKey.toString("hex")).getPublic();
+      const msg = randomBytes(i * i);
+      const circuitInput = getEffEcdsaCircuitInput(privKey, msg);
+
+      const w = await circuit.calculateWitness(circuitInput, true);
+
+      await circuit.assertOut(w, {
+        pubKeyX: pubKey.x.toString(),
+        pubKeyY: pubKey.y.toString()
+      });
+
+      await circuit.checkConstraints(w);
+    }
+  });
 });
