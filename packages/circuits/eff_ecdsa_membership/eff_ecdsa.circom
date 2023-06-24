@@ -11,7 +11,6 @@ include "../../../node_modules/circomlib/circuits/bitify.circom";
  *  public key validation included.
  */
 template EfficientECDSA() {
-    var bits = 256;
     signal input s;
     signal input Tx; // T = r^-1 * R
     signal input Ty; 
