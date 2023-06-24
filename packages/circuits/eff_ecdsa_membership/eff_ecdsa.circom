@@ -1,6 +1,7 @@
 pragma circom 2.1.2;
 
 include "./secp256k1/mul.circom";
+include "./secp256k1/add.circom";
 include "../../../node_modules/circomlib/circuits/bitify.circom";
 
 /**
